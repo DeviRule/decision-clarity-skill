@@ -68,21 +68,33 @@ Do not use this skill for:
 
 ## Workflow routing
 
-Route to the smallest useful workflow.
+State which workflow and mode you selected and why before producing output.
 
-- The problem is vague, overloaded, or poorly framed → `Workflows/Clarify.md`
-- The issue needs to be broken into facts, constraints, and mechanics → `Workflows/Deconstruct.md`
-- The issue has too many explanations, steps, features, or moving parts → `Workflows/Simplify.md`
-- The user needs a recommendation, decision rule, priority order, or test → `Workflows/Decide.md`
+Route by the strongest signal in the user's input:
 
-For non-trivial problems, use the full sequence:
+1. **User cannot articulate what they are deciding** → `Workflows/Clarify.md`
+   - Signals: vague language, undefined terms, goal-method confusion, "I'm not sure what to do"
+2. **User has a clear question but it involves multiple factors, mechanics, or hidden structure** → `Workflows/Deconstruct.md`
+   - Signals: "why is this happening?", black-box problems, accepted costs without decomposition
+3. **User has a clear question with too many options, steps, or moving parts** → `Workflows/Simplify.md`
+   - Signals: "this feels overbuilt", comparison of named options, "what can I remove?"
+4. **User needs a recommendation among known options or a next move** → `Workflows/Decide.md`
+   - Signals: "which should I pick?", "what should I do?", analysis already done, conversation at risk of stalling
 
-1. Clarify
-2. Deconstruct
-3. Simplify
-4. Decide
+**Tiebreaker:** If signals overlap, prefer Clarify. Clarity unlocks everything downstream.
 
-For simpler problems, compress the sequence but preserve the logic.
+**Full sequence:** For non-trivial problems where no single workflow is sufficient, run:
+1. Clarify → 2. Deconstruct → 3. Simplify → 4. Decide
+
+For simpler problems, compress the sequence. See `references/examples.md` Example 5 (Quick Reframe) for what compressed output looks like.
+
+**Urgency modifier:** When the decision is time-critical (active incident, closing window, expiring deadline), compress to Mode A regardless of complexity. The cost of delayed analysis can exceed the cost of a suboptimal decision. Name the time constraint explicitly: "This must be decided by X because Y."
+
+**Adversarial modifier:** When the decision involves an adversary (security threats, competitive moves, negotiation, hostile information environments), invert some defaults:
+- **Prefer higher assumption load** — assume the worst case, not the simplest explanation. Occam's razor can be weaponized: the simplest explanation for anomalous behavior may be what the adversary wants you to believe.
+- **Treat simple explanations with suspicion** — ask "who benefits from me reaching this conclusion?"
+- **Model the adversary's decision tree** — what will they do in response to each of your options?
+- Read `references/adversarial.md` for adversarial reasoning lenses.
 
 ## Mode selection
 
@@ -90,14 +102,10 @@ Choose the lightest response mode that still improves the decision.
 
 ### Mode A: Quick Reframe
 
-Use for short questions such as:
+**When:** Short or single-factor questions. The user needs a perspective shift, not a deep analysis.
+**Typical with:** Any single workflow, or compressed full sequence.
 
-- "What am I missing?"
-- "Am I overcomplicating this?"
-- "Does this really have to be this way?"
-- "Which option actually makes more sense?"
-
-Output:
+Output (from `references/output-patterns.md` Pattern 1):
 
 - Real issue
 - Hidden assumption
@@ -107,9 +115,10 @@ Output:
 
 ### Mode B: Structured Decision Analysis
 
-Use for startup, product, content, operations, and strategic decisions.
+**When:** Multi-factor decisions with real stakes — startup, product, operations, technical architecture, life choices.
+**Typical with:** Full sequence or Deconstruct + Decide.
 
-Output:
+Output (from `references/output-patterns.md` Pattern 2):
 
 - Real goal
 - Assumptions
@@ -122,15 +131,19 @@ Output:
 
 ### Mode C: Reasoning Audit
 
-Use when the user presents an argument, thesis, or decision path that may be weak, confused, or overbuilt.
+**When:** The user presents their own argument, thesis, plan, or decision path for review.
+**Typical with:** Any workflow. The key signal is that the user is asking you to *evaluate* their reasoning, not generate your own.
 
-Output:
+Output (from `references/output-patterns.md` Pattern 3):
 
 - Real question
 - Weak assumptions
 - Missing evidence or contradiction
-- Simpler interpretation or design
+- Simpler interpretation
 - Refined judgment
+- Next checkpoint
+
+For specialized output structures (option comparisons, workflow simplifications), see Patterns 4-5 in `references/output-patterns.md`.
 
 Do not force a long analysis when a shorter one is enough.
 
@@ -223,6 +236,8 @@ When comparing explanations or options, prefer the one that:
 
 Do not simplify by deleting reality. Simplicity must remain sufficient.
 
+**Exception:** In adversarial contexts, invert this rule — assume the worst case, not the simplest explanation. See the adversarial modifier in Workflow routing.
+
 ### 6. End with a decision
 
 Always end with one of:
@@ -236,6 +251,45 @@ Always end with one of:
 
 Do not end with abstract reflection alone.
 
+### 7. Assess reversibility
+
+Before recommending, ask: is this action a one-way door or a two-way door?
+
+**One-way doors** (hard to reverse): signing contracts, public launches, deleting data, burning bridges, spending limited capital. These need more certainty before acting.
+
+**Two-way doors** (easy to reverse): experiments, feature flags, prototype tests, temporary hires, soft launches. These need less certainty — bias toward action.
+
+When the best option is a one-way door, look for a two-way-door version first (pilot, prototype, limited test). Only recommend the irreversible version when no reversible alternative exists.
+
+### 8. Name what you don't know
+
+Distinguish between:
+- **facts you can verify** from the user's input or context
+- **claims the user made** that you are treating as true
+- **inferences you are making** based on general knowledge
+- **gaps** where you have no information
+
+Do not present inferences as facts. When a recommendation depends on an unverified claim, say so.
+
+### 9. Run a pre-mortem
+
+Before committing to a recommendation, assume it was implemented and failed. Ask:
+- What went wrong?
+- Which assumption turned out to be false?
+- What did we not see coming?
+
+This is not risk assessment (which is prospective). A pre-mortem uses prospective hindsight — imagining the failure as already happened — which increases the ability to identify failure modes by ~30%. If the pre-mortem reveals a plausible, high-consequence failure path, either mitigate it or reconsider the recommendation.
+
+### 10. Check the outside view
+
+Before finalizing, ask: how do similar decisions turn out for similar people in similar situations?
+
+- For startup decisions: most startups fail. What makes this one different?
+- For career transitions: what is the base rate of success for this type of move?
+- For technical bets: what happened to others who made this same architectural choice?
+
+The "inside view" (analyzing your specific situation) tends toward overconfidence. The "outside view" (reference class forecasting) provides calibration. Use both.
+
 ## If information is incomplete
 
 Do not stall. Instead:
@@ -246,6 +300,19 @@ Do not stall. Instead:
 4. proceed with the best current interpretation
 5. say what fact would most change the recommendation
 
+## Before finalizing output
+
+Run these structural checks. Each must be mechanically verifiable, not subjective:
+
+1. **Reframe check:** Does my output contain a reframed question or goal that differs from the user's surface phrasing? If not, I may be solving the stated problem without checking if it is the real one.
+2. **Assumption label check:** Does my output contain at least one item explicitly labeled as an assumption (not presented as fact)? If not, I may be smuggling assumptions.
+3. **Action check:** Does my last section contain a concrete action with a verb and an object — not a reflection or a vague aspiration? ("Run one enterprise pilot" not "consider exploring options")
+4. **Proportionality check:** Is my response length proportionate to the stakes? Mode A questions should get ~150 words. Mode B should not exceed the complexity of the problem itself.
+5. **Circle-back check:** If I reframed the question, did I also answer the original question through the new lens?
+6. **Pre-mortem check:** Did I name at least one plausible way the recommendation could fail?
+
+If any check fails, fix it before outputting. See `references/anti-patterns.md` for the full failure mode list.
+
 ## Domain references
 
 Read only the relevant references when useful:
@@ -254,6 +321,9 @@ Read only the relevant references when useful:
 - `references/product.md` for MVP, feature decisions, onboarding, user jobs, and scope
 - `references/content.md` for tutorials, creator workflows, content quality, and production systems
 - `references/operations.md` for SOPs, approvals, handoffs, and workflow simplification
+- `references/technical.md` for research direction, architecture choices, build-vs-buy, and technical tradeoffs
+- `references/adversarial.md` for decisions in adversarial contexts — security, competition, negotiation, hostile information
+- `references/personal.md` for career, life transitions, personal strategy, and value-alignment decisions
 - `references/trigger-questions.md` for transforming vague user prompts into sharper analysis frames
 - `references/output-patterns.md` for stable response structure
 - `references/examples.md` for concrete high-value examples

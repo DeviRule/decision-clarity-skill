@@ -20,7 +20,7 @@ What is this problem actually made of?
 
 ### Step 1: State the real goal
 
-Write the actual outcome that matters.
+Write the actual outcome that matters. If this workflow is entered directly (not after Clarify), first check whether the goal is well-defined. If it is vague, run Clarify first or at minimum restate the goal in outcome terms before proceeding.
 
 ### Step 2: Break the issue into constituent parts
 
@@ -37,6 +37,8 @@ Reduce the problem into components such as:
 - risks
 - constraints
 
+After listing components, identify the 1-2 that carry the most causal weight. Not all components matter equally — focus downstream analysis on the load-bearing ones.
+
 ### Step 3: Identify basic facts
 
 List only what is currently supported by evidence, observation, logic, or hard boundaries.
@@ -51,9 +53,16 @@ Separate:
 
 ### Step 5: Map causal structure
 
-Explain what seems to be causing what.
+For each load-bearing component, explain what seems to be causing what.
 
-Examples:
+For each causal claim, state:
+- **The link:** X causes Y
+- **The evidence:** what supports this (observation, data, logic, or user's claim)
+- **The test:** if X were removed or changed, would Y change?
+
+Focus on the most leveraged causal factors — the ones where intervention would have the largest effect.
+
+Example causal questions:
 - why a workflow is slow
 - why growth is expensive
 - why the product feels bloated
@@ -66,13 +75,18 @@ Show where the default story is larger or more mystical than the actual structur
 ## Output format
 
 - Real goal
-- Problem components
+- Problem components (with load-bearing ones marked)
 - Basic facts
 - Hard constraints
 - Soft constraints
+- Open assumptions (treated as constraints but not yet verified)
 - Causal structure
 - False complexity or misleading framing
 
 ## Quality bar
 
-A good deconstruction should make the issue feel more concrete, more measurable, and less inherited.
+A good deconstruction should:
+- make the issue feel more concrete and measurable
+- distinguish verified facts from inherited assumptions
+- identify which components carry the most causal weight
+- name at least one thing that looked complex but is actually a soft constraint or false complexity

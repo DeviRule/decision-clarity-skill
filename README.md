@@ -54,13 +54,16 @@ decision-clarity/
 │   ├── Simplify.md
 │   └── Decide.md
 └── references/
+    ├── adversarial.md
     ├── anti-patterns.md
     ├── business.md
     ├── content.md
     ├── examples.md
     ├── operations.md
     ├── output-patterns.md
+    ├── personal.md
     ├── product.md
+    ├── technical.md
     └── trigger-questions.md
 ```
 
@@ -85,6 +88,9 @@ Convert the clarified, decomposed, and simplified reasoning into a practical rec
 - **product.md** — MVP, feature decisions, onboarding, and scope simplification
 - **content.md** — tutorials, creator workflows, and audience-value decisions
 - **operations.md** — SOPs, approvals, handoffs, and process simplification
+- **personal.md** — career decisions, life transitions, values alignment, and sunk-cost detection
+- **technical.md** — research direction, architecture choices, build-vs-buy, and threat modeling
+- **adversarial.md** — adversarial reasoning for security, competition, and hostile information environments
 - **trigger-questions.md** — transforms vague prompts into sharper analysis frames
 - **output-patterns.md** — structured response formats
 - **examples.md** — concrete examples of full decision-clarity reasoning in action
